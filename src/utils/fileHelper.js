@@ -1,7 +1,5 @@
 const fs = window.require('fs').promises
 
-const publicPath = `${__static}/test.md`;
-
 const fileHelper = {
   readFile: (path) => {
     return fs.readFile(path, { encoding: 'utf8'})
@@ -16,9 +14,5 @@ const fileHelper = {
     return fs.unlink(path)
   }
 }
-
-fileHelper.readFile(publicPath).then((data) => {
-  console.log('data',data);
-})
 
 export default fileHelper

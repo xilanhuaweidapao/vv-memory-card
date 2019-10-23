@@ -30,7 +30,7 @@ npm run lint
 * 绝对路径还是 @ = src
 * public目录的路径是__static
 * 要想绑定事件在dom元素上，添加css样式 -webkit-app-region: no-drag 
-
+* 使用正则replace掉####
 
 # issues
 
