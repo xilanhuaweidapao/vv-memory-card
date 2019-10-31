@@ -1,15 +1,11 @@
 <template>
   <div class="hello">
-    <!-- <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
-      <swiper-slide>I'm Slide 1</swiper-slide>
-      <swiper-slide>I'm Slide 2</swiper-slide>
-      <swiper-slide>I'm Slide 3</swiper-slide>
-      <swiper-slide>I'm Slide 4</swiper-slide>
-      <swiper-slide>I'm Slide 5</swiper-slide>
-      <swiper-slide>I'm Slide 6</swiper-slide>
-      <swiper-slide>I'm Slide 7</swiper-slide>
-    </swiper>-->
-    <VueShowdown :markdown="content" flavor="github" :extensions="[...bindings]"/>
+    <swiper :options="swiperOption" ref="mySwiper">
+      <swiper-slide v-for="(pageContent,index) in content" :key="index">
+        <VueShowdown :markdown="pageContent" flavor="github" :extensions="[...bindings]"/>
+      </swiper-slide>
+    </swiper>
+    
   </div>
 </template>
 
@@ -21,6 +17,7 @@ const path = require("path");
 const filesPath = `${__static}/resources`;
 import fileHelper from "@/utils/fileHelper";
 import readDirDeep from "../utils/fileReaderLoop";
+import chunk from 'lodash.chunk';
 
 export default {
   name: "Display",
@@ -35,7 +32,7 @@ export default {
     return {
       swiperOption: {
         autoplay: {
-          delay: 2500,
+          delay: 6000,
           disableOnInteraction: false
         }
       },
@@ -56,30 +53,21 @@ export default {
     }));
   },
   mounted() {
-    // const classMap = {
-    //   ul: "word-list",
-    //   li: "word-item"
-    // };
-
-    // this.bindings = Object.keys(classMap).map(key => ({
-    //   type: "output",
-    //   regex: new RegExp(`<${key}>`, "g"),
-    //   replace: `<${key} class="${classMap[key]}">`
-    // }));
-
-    // this.content = readDirDeep(filesPath);
-    // console.log('content',this.content);
     fileHelper.readFile(`${__static}/陌生单词.md`).then((data) => {
-      this.content = data;
-      console.log(this.content);
       
+      const match = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
+      const chunkData = chunk(match,18);
+      const finalContent = chunkData.map(pageData => {
+        return pageData.join("\n");
+      });
+      this.content = finalContent;
+      console.log('chunkData',chunkData,finalContent);
     })
   },
   methods: {
     sendMsg() {
       // ipcRenderer.send("add-new-article", 100);
     },
-    callback() {},
     handleClick(e) {
       e.stopPropagation();
     }
@@ -108,6 +96,8 @@ export default {
       border-radius: 8px;
       font-weight: bold;
       font-size: 18px;
-      p
-        margin 0
+      overflow: hidden
+      text-overflow:ellipsis
+      white-space: nowrap
+      text-align left
 </style>
