@@ -15,14 +15,15 @@ function createWindow() {
   // Create the browser window.
   // 获取屏幕宽高
   const { width } = electron.screen.getPrimaryDisplay().workAreaSize
-  
+
   win = new BrowserWindow({
     width: 800,
     height: 500,
     x: width - 800,
     y: 0,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     },
     frame: false
   });

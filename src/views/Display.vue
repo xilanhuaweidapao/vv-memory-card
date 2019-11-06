@@ -18,6 +18,7 @@ const filesPath = `${__static}/resources`;
 import fileHelper from "@/utils/fileHelper";
 import readDirDeep from "../utils/fileReaderLoop";
 import chunk from 'lodash.chunk';
+import { getArticle } from '@/api/article';
 
 export default {
   name: "Display",
@@ -53,15 +54,32 @@ export default {
     }));
   },
   mounted() {
-    fileHelper.readFile(`${__static}/陌生单词.md`).then((data) => {
+    // fileHelper.readFile(`${__static}/陌生单词.md`).then((data) => {
       
-      const match = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
-      const chunkData = chunk(match,18);
+    //   const match = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
+    //   const chunkData = chunk(match,18);
+    //   const finalContent = chunkData.map(pageData => {
+    //     return pageData.join("\n");
+    //   });
+    //   this.content = finalContent;
+    //   console.log('chunkData',chunkData,finalContent);
+    // });
+
+    getArticle('repos/demaweiliya/tech_card/docs/dc0o1d').then((res) => {
+      // console.log('res',res.data.data.body_lake);
+      let data = res.data.data.body_lake;
+      let matchs = data.match(/(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g);
+      let result = matchs.map(word => {
+        return word.replace(/<\/li>/g,"").replace(/<li>/g,"- ");
+      });
+      console.log(result);
+      
+      const chunkData = chunk(result,24);
       const finalContent = chunkData.map(pageData => {
         return pageData.join("\n");
       });
       this.content = finalContent;
-      console.log('chunkData',chunkData,finalContent);
+      //根据修改时间
     })
   },
   methods: {
@@ -83,9 +101,10 @@ export default {
 .word-list
   overflow hidden
   padding 20px
+  padding-left 30px
   margin 0
   display: grid;
-  grid-template-columns: repeat(3, 30%)
+  grid-template-columns: repeat(3, 31%)
   grid-template-rows: auto auto auto
   grid-row-gap: 20px
   grid-column-gap: 20px
