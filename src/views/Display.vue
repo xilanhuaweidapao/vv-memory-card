@@ -9,6 +9,7 @@
 </template>
 
 <script>
+// Todo 在App.vue里面去请求数据
 import { ipcRenderer } from "electron";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
@@ -31,8 +32,15 @@ export default {
   data() {
     return {
       swiperOption: {
+        speed:500,
+        on: {
+          slideChange:() => {
+            console.log('isEnd',this.$refs.mySwiper.swiper.isEnd);
+            // 在store里保存一个当前在展示的文档序号
+          }
+        },
         autoplay: {
-          delay: 20000, // 切换时间开为参数
+          delay: 2000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
@@ -54,6 +62,7 @@ export default {
     }));
   },
   mounted() {
+    // 
     // fileHelper.readFile(`${__static}/陌生单词.md`).then((data) => {
 
     //   const match = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
@@ -70,16 +79,19 @@ export default {
       spinner: "el-icon-loading",
       background: "coral"
     });
-    getArticle("repos/demaweiliya/tech_card/docs/dc0o1d").then(res => {
-      // console.log('res',res.data.data.body_lake);
-      let data = res.data.data.body_lake;
-      let matchs = data.match(
-        /(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g
-      );
-      let result = matchs.map(word => {
-        return word.replace(/<\/li>/g, "").replace(/<li>/g, "- ");
-      });
-      //console.log(result);
+    getArticle("repos/demaweiliya/memory_space/docs/dc0o1d").then(res => {
+      
+      let data = res.data.data.body;
+     
+      data = data.replace(/#{1,6}\s[A-Z]/mig,"").replace(/<a name="\w{5}"><\/a>/img,"");
+      let result = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
+      console.log('data',result);
+      // let matchs = data.match(
+      //   /(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g
+      // );
+      // let result = matchs.map(word => {
+      //   return word.replace(/<\/li>/g, "").replace(/<li>/g, "- ");
+      // });
 
       const chunkData = chunk(result, 21);
       const finalContent = chunkData.map(pageData => {
