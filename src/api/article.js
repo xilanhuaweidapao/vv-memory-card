@@ -9,3 +9,7 @@ const instance = axios.create({
 export function getArticle(url) {
     return instance.get(url);
 }
+
+export function getAllRepos() {
+  return instance.get('users/demaweiliya/repos')
+}

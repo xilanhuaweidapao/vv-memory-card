@@ -2,10 +2,9 @@
   <div class="hello">
     <swiper :options="swiperOption" ref="mySwiper">
       <swiper-slide v-for="(pageContent,index) in content" :key="index">
-        <VueShowdown :markdown="pageContent" flavor="github" :extensions="[...bindings]"/>
+        <VueShowdown :markdown="pageContent" flavor="github" :extensions="[...bindings]" />
       </swiper-slide>
     </swiper>
-    
   </div>
 </template>
 
@@ -17,8 +16,8 @@ const path = require("path");
 const filesPath = `${__static}/resources`;
 import fileHelper from "@/utils/fileHelper";
 import readDirDeep from "../utils/fileReaderLoop";
-import chunk from 'lodash.chunk';
-import { getArticle } from '@/api/article';
+import chunk from "lodash.chunk";
+import { getArticle } from "@/api/article";
 
 export default {
   name: "Display",
@@ -33,16 +32,17 @@ export default {
     return {
       swiperOption: {
         autoplay: {
-          delay: 6000,
-          disableOnInteraction: false
+          delay: 20000, // 切换时间开为参数
+          disableOnInteraction: false,
+          virtual: true
         }
       },
       bindings: {},
-      content: ''
+      content: ""
     };
   },
   created() {
-     const classMap = {
+    const classMap = {
       ul: "word-list",
       li: "word-item"
     };
@@ -55,7 +55,7 @@ export default {
   },
   mounted() {
     // fileHelper.readFile(`${__static}/陌生单词.md`).then((data) => {
-      
+
     //   const match = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
     //   const chunkData = chunk(match,18);
     //   const finalContent = chunkData.map(pageData => {
@@ -64,23 +64,31 @@ export default {
     //   this.content = finalContent;
     //   console.log('chunkData',chunkData,finalContent);
     // });
-
-    getArticle('repos/demaweiliya/tech_card/docs/dc0o1d').then((res) => {
+    const loading = this.$loading({
+      lock: true,
+      text: "Loading",
+      spinner: "el-icon-loading",
+      background: "coral"
+    });
+    getArticle("repos/demaweiliya/tech_card/docs/dc0o1d").then(res => {
       // console.log('res',res.data.data.body_lake);
       let data = res.data.data.body_lake;
-      let matchs = data.match(/(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g);
+      let matchs = data.match(
+        /(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g
+      );
       let result = matchs.map(word => {
-        return word.replace(/<\/li>/g,"").replace(/<li>/g,"- ");
+        return word.replace(/<\/li>/g, "").replace(/<li>/g, "- ");
       });
-      console.log(result);
-      
-      const chunkData = chunk(result,24);
+      //console.log(result);
+
+      const chunkData = chunk(result, 21);
       const finalContent = chunkData.map(pageData => {
         return pageData.join("\n");
       });
       this.content = finalContent;
+      loading.close();
       //根据修改时间
-    })
+    });
   },
   methods: {
     sendMsg() {
@@ -95,28 +103,34 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus">
-//为什么需要去除scoped???
-.hello
-  overflow hidden
-.word-list
-  overflow hidden
-  padding 20px
-  padding-left 30px
-  margin 0
+// 为什么需要去除scoped???
+.hello {
+  overflow: hidden;
+}
+
+.word-list {
+  overflow: hidden;
+  padding: 20px;
+  padding-left: 30px;
+  margin: 0;
   display: grid;
-  grid-template-columns: repeat(3, 31%)
-  grid-template-rows: auto auto auto
-  grid-row-gap: 20px
-  grid-column-gap: 20px
-  .word-item
-      display: inline-block;
-      padding: 8px;
-      background-color: pink;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 18px;
-      overflow: hidden
-      text-overflow:ellipsis
-      white-space: nowrap
-      text-align left
+  grid-template-columns: repeat(3, 31%);
+  grid-template-rows: auto auto auto;
+  grid-row-gap: 20px;
+  grid-column-gap: 20px;
+
+  .word-item {
+    display: inline-block;
+    padding: 8px;
+    background-color: pink;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    cursor: pointer;
+  }
+}
 </style>
