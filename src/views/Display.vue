@@ -15,10 +15,12 @@ import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 const path = require("path");
 const filesPath = `${__static}/resources`;
+const fs = require('fs');
 import fileHelper from "@/utils/fileHelper";
 import readDirDeep from "../utils/fileReaderLoop";
 import chunk from "lodash.chunk";
 import { getArticle } from "@/api/article";
+import Estore from 'electron-store';
 
 export default {
   name: "Display",
@@ -82,10 +84,13 @@ export default {
     getArticle("repos/demaweiliya/memory_space/docs/dc0o1d").then(res => {
       
       let data = res.data.data.body;
-     
+      let fileName = res.data.data.title;
+      // 过滤标题与a标签
       data = data.replace(/#{1,6}\s[A-Z]/mig,"").replace(/<a name="\w{5}"><\/a>/img,"");
+      console.log('fs',fs);
+      fs.readFileSync(`${__static}/${fileName}.md`);
+      // 为什么在axios的then中调用node的写文件方法会导致axios方法的重复执行？？？
       let result = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
-      console.log('data',result);
       // let matchs = data.match(
       //   /(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g
       // );
