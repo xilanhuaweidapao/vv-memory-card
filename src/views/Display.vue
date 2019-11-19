@@ -19,7 +19,8 @@ const fs = require('fs');
 import fileHelper from "@/utils/fileHelper";
 import readDirDeep from "../utils/fileReaderLoop";
 import chunk from "lodash.chunk";
-import { getArticle } from "@/api/article";
+import { getArticle } from "@/api/yuque";
+import { shuffle } from "@/utils/utils";
 import Estore from 'electron-store';
 
 export default {
@@ -34,7 +35,7 @@ export default {
   data() {
     return {
       swiperOption: {
-        speed:500,
+        speed:1000,
         on: {
           slideChange:() => {
             console.log('isEnd',this.$refs.mySwiper.swiper.isEnd);
@@ -42,7 +43,7 @@ export default {
           }
         },
         autoplay: {
-          delay: 2000, // 切换时间开为参数
+          delay: 60000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
@@ -52,11 +53,11 @@ export default {
     };
   },
   created() {
+    // 为标签定义类名
     const classMap = {
       ul: "word-list",
       li: "word-item"
     };
-
     this.bindings = Object.keys(classMap).map(key => ({
       type: "output",
       regex: new RegExp(`<${key}>`, "g"),
@@ -81,15 +82,12 @@ export default {
       spinner: "el-icon-loading",
       background: "coral"
     });
-    getArticle("repos/demaweiliya/memory_space/docs/dc0o1d").then(res => {
-      
+    getArticle({username: 'demaweiliya', reposName: 'memory_space', articleSlug: 'dc0o1d'}).then(res => {
       let data = res.data.data.body;
       let fileName = res.data.data.title;
       // 过滤标题与a标签
       data = data.replace(/#{1,6}\s[A-Z]/mig,"").replace(/<a name="\w{5}"><\/a>/img,"");
-      console.log('fs',fs);
-      fs.readFileSync(`${__static}/${fileName}.md`);
-      // 为什么在axios的then中调用node的写文件方法会导致axios方法的重复执行？？？
+      // fs.readFileSync(`${__static}/${fileName}.md`);
       let result = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);
       // let matchs = data.match(
       //   /(<li>[^<]+<\/li>|<li><span>[^<]+<\/span><\/li>)/g
@@ -98,7 +96,7 @@ export default {
       //   return word.replace(/<\/li>/g, "").replace(/<li>/g, "- ");
       // });
 
-      const chunkData = chunk(result, 21);
+      const chunkData = chunk(shuffle(result), 21);
       const finalContent = chunkData.map(pageData => {
         return pageData.join("\n");
       });
