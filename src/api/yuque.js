@@ -12,13 +12,18 @@ export function getArticle({userName, reposName, articleSlug}) {
       }
     });
 }
-
+// 获取仓库下所有的文档
 export function getArticlesFromRepos(userName, reposSlug) {
   return instance.get(`repos/${userName}/${reposSlug}/docs`);
 }
 
 export function getAllRepos(userName) {
   return instance.get(`users/${userName}/repos`);
+}
+
+// 获取一个仓库的目录结构
+export function getDetailFromRepos(userName, reposSlug) {
+  return instance.get(`repos/${userName}/${reposSlug}/toc`);
 }
 
 

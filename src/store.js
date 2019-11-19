@@ -6,20 +6,28 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    reposName: ''
+    reposName: '',
+    userName: 'demaweiliya'
   },
   mutations: {
-    changeCurRepos(state, reposName) {
+    changeRepos(state, reposName) {
       state.reposName = reposName;
+    },
+    changeUserName(state, userName) {
+      state.userName = userName;
     }
   },
   actions: {
-    changeCurRepos({commit}, reposName) {
-      commit('changeCurRepos', reposName);
+    changeRepos({commit}, reposName) {
+      commit('changeRepos', reposName)
+    },
+    changeUserName({commit}, userName) {
+      commit('changeUserName', userName)
     }
   },
   getters: {
-    curReposName: state => state.reposName
+    reposName: state => state.currentRepos,
+    userName: state => state.userName
   },
   plugins:[createLogger()]
 })

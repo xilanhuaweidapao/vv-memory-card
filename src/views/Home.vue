@@ -1,11 +1,10 @@
 <template>
   <div class="home">
-    <Display msg="Welcome to Your Vue.js App"/>
+    <Display/>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import Display from '@/views/Display.vue'
 
 export default {

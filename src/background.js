@@ -77,7 +77,6 @@ app.on('ready', async () => {
     //   console.error('Vue Devtools failed to install:', e.toString())
     // }
     ipcMain.on('add-new-article', (event, id) => {
-      console.log('id', id);
     });
   }
   createWindow();

@@ -2,6 +2,7 @@
   "name": "vv-memory-card",
   "version": "0.1.0",
   "private": true,
+  "description": "一款用于加强记忆的pc桌面应用",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

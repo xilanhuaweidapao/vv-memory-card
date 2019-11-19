@@ -1,35 +1,28 @@
 <template>
   <el-row>
     <el-col>
-      <el-dropdown @command="changeRepos">
-        <el-button type="primary">
-          选择默认仓库
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(repos, index) in reposList" :command="repos.name" :key="index">{{repos.name}}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-
-      <el-form ref="form" :model="form" label-width="80px">
-  <el-form-item label="账号名称">
-    <el-input v-model="userName"></el-input>
-  </el-form-item>
-  <el-form-item label="默认知识库">
-    <el-select v-model="reposName" placeholder="请选择默认知识库">
-      <el-option v-for="(repos, index) in reposList" :key="index" :label="repos.name" :value="repos.name"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
-    <el-button>取消</el-button>
-  </el-form-item>
-</el-form>
-    </el-col>
-    <el-col>
-
-    </el-col>
-    <el-col>
-      <el-button @click="saveConfig">save config!</el-button>
+      <el-form ref="config" :model="config" label-width="100px">
+        <el-form-item label="账号名称">
+          <el-input v-model="config.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="默认知识库">
+          <el-select
+            v-model="config.reposName"
+            @focus="getRepos"
+            placeholder="请选择默认知识库"
+          >
+            <el-option
+              v-for="(repos, index) in reposList"
+              :key="index"
+              :label="repos.name"
+              :value="repos.slug"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">保存配置</el-button>
+        </el-form-item>
+      </el-form>
     </el-col>
   </el-row>
 </template>
@@ -38,40 +31,58 @@
 // 默认知识库
 // 设置切换时间
 // 主题设置
-import { getAllRepos } from "@/api/yuque";
+import { getAllRepos, getDetailFromRepos } from "@/api/yuque";
 
 export default {
   data() {
     return {
-      reposList:[],
-      reposName: '',
-      userName: '',
-      form: {}
+      reposList: [],
+      config: {
+        reposName: "",
+        userName: ""
+      }
     };
   },
   mounted() {
-    getAllRepos('demaweiliya').then(res => {
-      console.log("res", res);
-      if (res.status && res.status === 200) {
-        this.reposList = [];
-        const data = res.data.data;
-        data.forEach(repos => {
-          const { name, slug } = repos;
-          this.reposList.push({name, slug});
-        });
-      }
-    });
+    this.config.userName = this.userName;
+  },
+  computed: {
+    userName() {
+      return this.$store.getters.userName;
+    }
   },
   methods: {
     changeRepos(reposName) {
       this.reposName = reposName;
     },
-    saveConfig() {
-      this.$store.dispatch('changeCurRepos', this.reposName);
+    getRepos() {
+      !this.reposList.length && this.userName && getAllRepos(this.userName).then(res => {
+        console.log("res", res);
+        if (res.status && res.status === 200) {
+          this.reposList = [];
+          const data = res.data.data;
+          data.forEach(repos => {
+            const { name, slug } = repos;
+            this.reposList.push({ name, slug });
+          });
+        }
+      });
+    },
+    onSubmit() {
+      this.$store.dispatch("changeRepos", this.config.reposName);
+      this.$store.dispatch("changeUserName", this.config.userName);
+
+      getDetailFromRepos(this.config.userName, this.config.reposName).then((res) => {
+        console.log('res', res);
+      })
     }
   }
 };
 </script>
 
-<style>
+<style lang="stylus">
+.el-form {
+  width: 300px
+  margin-top 40px
+}
 </style>
