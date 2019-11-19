@@ -82,7 +82,7 @@ export default {
       spinner: "el-icon-loading",
       background: "coral"
     });
-    getArticle({username: 'demaweiliya', reposName: 'memory_space', articleSlug: 'dc0o1d'}).then(res => {
+    getArticle({userName: 'demaweiliya', reposName: 'memory_space', articleSlug: 'dc0o1d'}).then(res => {
       let data = res.data.data.body;
       let fileName = res.data.data.title;
       // 过滤标题与a标签
