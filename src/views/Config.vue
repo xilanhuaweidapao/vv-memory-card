@@ -32,6 +32,8 @@
 // 设置切换时间
 // 主题设置
 import { getAllRepos, getDetailFromRepos } from "@/api/yuque";
+const Store = require('electron-store');
+const Estore = new Store();
 
 export default {
   data() {
@@ -71,7 +73,6 @@ export default {
     onSubmit() {
       this.$store.dispatch("changeRepos", this.config.reposName);
       this.$store.dispatch("changeUserName", this.config.userName);
-
       getDetailFromRepos(this.config.userName, this.config.reposName).then((res) => {
         console.log('res', res);
       })

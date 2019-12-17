@@ -1,40 +1,49 @@
 <template>
   <el-row>
-    <el-col :span="24">
-      <div class="setting-bar">
-        <el-button-group>
-          <el-button
-            type="danger"
-            size="medium"
-            icon="el-icon-setting"
-            circle
-            @click="switchRouter('config')"
-          ></el-button>
-          <el-button type="warning" size="medium" icon="el-icon-menu" circle @click="switchRouter('home')"></el-button>
-        </el-button-group>
-      </div>
+    <el-col :span="2" :offset="22">
+      <el-button
+        class="setting-btn"
+        type="success"
+        icon="el-icon-setting"
+        @click="openDrawer"
+        circle
+      ></el-button>
     </el-col>
+    <el-drawer
+      :append-to-body="false"
+      :visible.sync="drawer"
+      direction="rtl"
+      :show-close="false"
+      size="50%"
+      :withHeader="false"
+    >
+      <Config />
+    </el-drawer>
   </el-row>
 </template>
 
 <script>
+import Config from "./Config";
+
 export default {
+  components: {
+    Config
+  },
+  data() {
+    return {
+      drawer: false
+    }
+  },
   methods: {
-    switchRouter(compName) {
-      if(compName) {
-        this.$router.push({ name: compName });
-      }else {
-        this.$router.push({ name: 'home' });
-      }
+    openDrawer() {
+      this.drawer = true;
     }
   }
 };
 </script>
 
-<style lang="stylus">
-.setting-bar {
-  width: 10%;
-  margin-top: 10px;
-  margin-left: 25px;
+<style lang="stylus" scoped>
+.setting-btn {
+  margin-top:10px
 }
 </style>

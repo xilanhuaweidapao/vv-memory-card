@@ -1,20 +1,27 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
     <Header/>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <script>
-import Header from './views/Header';
+import Header from "./views/Header";
+
 export default {
   components: {
     Header
+  },
+  data() {
+    return {
+      drawer: false
+    }
+  },
+  methods: {
+    openDrawer() {
+      this.drawer = true;
+    }
   }
-}
+};
 </script>
 <style lang="stylus">
 body,html
