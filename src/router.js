@@ -19,11 +19,11 @@ export default new Router({
       name: 'home',
       component: Home
     },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    },
+    // {
+    //   path: '/about',
+    //   name: 'about',
+    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+    // },
     {
       path: '/config',
       name: 'config',

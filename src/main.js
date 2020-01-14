@@ -6,14 +6,6 @@ import ElementUI from 'element-ui';
 import VueShowdown from 'vue-showdown';
 import 'element-ui/lib/theme-chalk/index.css';
 
-// import Store from 'electron-store';
-
-// const storeList = new Store();
-
-// storeList.set('name','weidapao');
-
-// console.log(storeList.get('name'));
-
 Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
 Vue.use(VueShowdown, {
   // 设置 showdown 默认 flavor

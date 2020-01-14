@@ -32,7 +32,7 @@
 // 设置切换时间
 // 主题设置
 import { getAllRepos, getDetailFromRepos } from "@/api/yuque";
-const Store = require('electron-store');
+const Store = require("electron-store");
 const Estore = new Store();
 
 export default {
@@ -58,24 +58,56 @@ export default {
       this.reposName = reposName;
     },
     getRepos() {
-      !this.reposList.length && this.userName && getAllRepos(this.userName).then(res => {
-        console.log("res", res);
-        if (res.status && res.status === 200) {
-          this.reposList = [];
-          const data = res.data.data;
-          data.forEach(repos => {
-            const { name, slug } = repos;
-            this.reposList.push({ name, slug });
-          });
-        }
-      });
+      !this.reposList.length &&
+        this.userName &&
+        getAllRepos(this.userName).then(res => {
+          // console.log("res", res);
+          if (res.status && res.status === 200) {
+            this.reposList = [];
+            const data = res.data.data;
+            data.forEach(repos => {
+              const { name, slug } = repos;
+              this.reposList.push({ name, slug });
+            });
+          }
+        });
     },
     onSubmit() {
+      // 保存配置后关闭drawer
+      if (!this.config.reposName || !this.config.userName) {
+        return;
+      }
       this.$store.dispatch("changeRepos", this.config.reposName);
       this.$store.dispatch("changeUserName", this.config.userName);
-      getDetailFromRepos(this.config.userName, this.config.reposName).then((res) => {
-        console.log('res', res);
-      })
+      // console.log('estore', Estore.store);
+      getDetailFromRepos(this.config.userName, this.config.reposName).then(
+        res => {
+          const data = res.data.data;
+          // 在Estore里面将仓库名作为key，文档列表数组作为value
+          // console.log("data", data);
+          if (data && Array.isArray(data)) {
+            // Estore.set(this.config.reposName, data);
+            Estore.set(this.config.reposName, [
+              {
+                title: "记忆截图",
+                slug: "puwqy4",
+                depth: 1
+              },
+              {
+                title: "陌生单词",
+                slug: "dc0o1d",
+                depth: 1
+              },
+              {
+                title: "英文句子(1~100)",
+                slug: "bghtcm",
+                depth: 1
+              }
+            ]);
+            console.log('Estore.store',Estore.store);
+          }
+        }
+      );
     }
   }
 };

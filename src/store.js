@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    reposName: '',
+    reposName: 'memory_space',
     userName: 'demaweiliya'
   },
   mutations: {
@@ -26,7 +26,7 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    reposName: state => state.currentRepos,
+    reposName: state => state.reposName,
     userName: state => state.userName
   },
   plugins:[createLogger()]

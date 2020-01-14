@@ -1,9 +1,9 @@
 'use strict';
 
-import electron , { app, protocol, BrowserWindow, ipcMain} from 'electron';
+import electron , { app, protocol, BrowserWindow, ipcMain, Tray, Menu} from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 const isDevelopment = process.env.NODE_ENV !== 'production';
-
+const path = require('path');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -23,9 +23,11 @@ function createWindow() {
     y: 0,
     webPreferences: {
       nodeIntegration: true,
+      // 设置为false才可以请求数据
       webSecurity: false
     },
-    frame: false
+    frame: false,
+    skipTaskbar: true // 是否在任务栏显示窗口
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -63,6 +65,7 @@ app.on('activate', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+let tray;
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
@@ -76,9 +79,23 @@ app.on('ready', async () => {
     // } catch (e) {
     //   console.error('Vue Devtools failed to install:', e.toString())
     // }
-    ipcMain.on('add-new-article', (event, id) => {
-    });
   }
+  tray = new Tray(path.join(__static,'icon.ico'));
+  // 点击托盘图标控制应用显隐
+  tray.on('click', function() {
+    if(win.isVisible()) {
+      win.hide();
+    }else{
+      win.show();
+    }
+  })
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '关闭应用', type: 'normal', click: function(menuItem, browserWindow, event){
+      app.quit();
+    } }
+  ])
+  tray.setToolTip('vv-记忆卡片');
+  tray.setContextMenu(contextMenu);
   createWindow();
 });
 

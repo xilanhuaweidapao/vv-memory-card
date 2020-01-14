@@ -1,25 +1,16 @@
 <template>
   <div id="app">
-    <Header/>
     <router-view />
   </div>
 </template>
 <script>
-import Header from "./views/Header";
 
 export default {
-  components: {
-    Header
-  },
   data() {
     return {
-      drawer: false
     }
   },
   methods: {
-    openDrawer() {
-      this.drawer = true;
-    }
   }
 };
 </script>
