@@ -6,11 +6,13 @@
       v-if="content && content.length"
     >
       <swiper-slide v-for="(pageContent, index) in content" :key="index">
-        <VueShowdown
-          :markdown="pageContent"
-          flavor="github"
-          :extensions="[...bindings]"
-        />
+        <div>
+          <ul class="word-list">
+            <li class="word-item" v-for="(word, index) in pageContent" :key="index">
+              {{ word }}
+            </li>
+          </ul>
+        </div>
       </swiper-slide>
     </swiper>
   </div>
@@ -51,7 +53,6 @@ export default {
         speed: 1000,
         on: {
           slideChange: () => {
-            console.log('isEnd',this.$refs.mySwiper.swiper.isEnd);
             // 在store里保存一个当前在展示的文档序号
             // 配置可以提到 mixin里
             const isEnd = this.$refs.mySwiper.swiper.isEnd;
@@ -61,38 +62,23 @@ export default {
           }
         },
         autoplay: {
-          delay: 30000, // 切换时间开为参数
+          delay: 60000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
       },
-      bindings: {},
       content: ""
     };
-  },
-  created() {
-    // 为标签定义类名
-    const classMap = {
-      ul: "word-list",
-      li: "word-item"
-    };
-    this.bindings = Object.keys(classMap).map(key => ({
-      type: "output",
-      regex: new RegExp(`<${key}>`, "g"),
-      replace: `<${key} class="${classMap[key]}">`
-    }));
   },
   mounted() {
     // 过滤标题与a标签
     const filterData = this.data
       .replace(/#{1,6}\s[A-Z]/gim, "")
       .replace(/<a name="\w{5}"><\/a>/gim, "");
-    let result = filterData.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/gim);
-    const chunkData = chunk(shuffle(result), 24);
-    const finalContent = chunkData.map(pageData => {
-      return pageData.join("\n");
-    });
-    this.content = finalContent;
+    let result = filterData.match(/(?<=-\s)[^-]+/img); // 将md字符串匹配成内容数组
+    const chunkData = chunk(shuffle(result), 24); // 随机分组
+    console.log('finalContent', chunkData);
+    this.content = chunkData;
   },
   methods: {
   }

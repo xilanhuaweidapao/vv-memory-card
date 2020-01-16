@@ -25,7 +25,8 @@ export default {
   data() {
     return {
       resData: null,
-      contentType: null
+      contentType: null,
+      docTitle: null
     };
   },
   computed: {
@@ -115,19 +116,26 @@ export default {
   },
   methods: {
     endAndChange() {
+      console.log('endAndChange');
       this.changeDisplayDoc();
     },
     // 设置后应进行更新！！！
     changeDisplayDoc() {
       if (Estore.has(this.currentReposName)) {
-        const { slug } = Estore.get(this.currentReposName)[Math.floor(Math.random() * 3)];
+        // Math.floor(Math.random() * 3)
+        const { slug } = Estore.get(this.currentReposName)[1];
         getArticle({
           userName: this.currentUserName,
           reposName: this.currentReposName,
           articleSlug: slug
         }).then(res => {
+          console.log('res', res);
+          this.docTitle = res.data.data.title;
           this.resData = res.data.data.body;
           this.contentType = res.data.data.custom_description;
+          if(!fs.existsSync(`${__static}/resources/${this.docTitle}.md`)) {
+            fileHelper.writeFile(`${__static}/resources/${this.docTitle}.md`, this.resData);
+          }
         });
       }
     }

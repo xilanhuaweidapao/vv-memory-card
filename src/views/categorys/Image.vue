@@ -6,7 +6,7 @@
       v-if="imageList && imageList.length"
     >
       <swiper-slide v-for="(imageSrc, index) in imageList" :key="index">
-        <div class="image-container"><img :src="imageSrc" alt=""></div>
+        <div class="image-container"><img :src="imageSrc" alt="" /></div>
         <!-- <VueShowdown :markdown="pageContent" flavor="github" :extensions="[...bindings]" /> -->
       </swiper-slide>
     </swiper>
@@ -47,10 +47,14 @@ export default {
           slideChange: () => {
             // console.log('isEnd',this.$refs.mySwiper.swiper.isEnd);
             // 在store里保存一个当前在展示的文档序号
+            const isEnd = this.$refs.mySwiper.swiper.isEnd;
+            if (isEnd) {
+              this.$emit("showEnd");
+            }
           }
         },
         autoplay: {
-          delay: 60000, // 切换时间开为参数
+          delay: 1000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
@@ -83,8 +87,8 @@ export default {
       // console.log("res from display !!!", res, res.data.data.body);
       const imageSrc = res.data.data.body;
       // 匹配image 地址
-      const imageSrcList = imageSrc.match(/(?<=\()[^\)]+(?=\))/img);
-      console.log('imageSrcList ddd', imageSrcList);
+      const imageSrcList = imageSrc.match(/(?<=\()[^\)]+(?=\))/gim);
+      console.log("imageSrcList ddd", imageSrcList);
       this.imageList = imageSrcList;
     });
 
@@ -130,8 +134,7 @@ export default {
 
     // this.content = resultlalala;
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>
 

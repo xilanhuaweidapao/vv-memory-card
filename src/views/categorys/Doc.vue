@@ -7,7 +7,7 @@
     >
       <swiper-slide v-for="(docList, index) in content" :key="index">
         <el-card v-for="(doc, index) in docList" :key="index">
-            <p>{{ doc }}</p>
+            <p class="params">{{ doc }}</p>
         </el-card>
       </swiper-slide>
     </swiper>
@@ -57,7 +57,7 @@ export default {
           }
         },
         autoplay: {
-          delay: 60000, // 切换时间开为参数
+          delay: 2000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
@@ -74,10 +74,8 @@ export default {
     // .match(/(?<=\()[\w\W]+(?=\))/)
     console.log('this.data', this.data);
     const filterData = this.data.match(/(?<=:::(info|danger|tips|warning|success)\n)[^:]+(?=\n:::)/img);
-    // console.log("this.data ddddd", filterData);
     const chunkData = chunk(filterData, 3);
     this.content = chunkData;
-    console.log("this.data ccccc", chunkData);
     // fileHelper.readFile(`${__static}/陌生单词.md`).then((data) => {
 
     //   const match = data.match(/^-(\s\w+\s[\u4e00-\u9fa5]+)+/mig);

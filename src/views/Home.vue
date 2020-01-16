@@ -2,7 +2,7 @@
   <div class="home">
     <el-button
       class="setting-btn"
-      type="success"
+      type="danger"
       icon="el-icon-setting"
       @click="openDrawer"
       circle
