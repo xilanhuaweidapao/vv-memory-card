@@ -116,7 +116,6 @@ export default {
   },
   methods: {
     endAndChange() {
-      console.log('endAndChange');
       this.changeDisplayDoc();
     },
     // 设置后应进行更新！！！
@@ -129,7 +128,6 @@ export default {
           reposName: this.currentReposName,
           articleSlug: slug
         }).then(res => {
-          console.log('res', res);
           this.docTitle = res.data.data.title;
           this.resData = res.data.data.body;
           this.contentType = res.data.data.custom_description;

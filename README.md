@@ -40,6 +40,7 @@ npm run lint
 
 - Blank screen on builds, but works fine on serve
 - 在mounted里面使用fs.writeFile会导致重复渲染页面？？？
+- 如何配置webpack来让dev-server停止监听某个文件夹？
 > 因为当前目录被监听了，所以fs改写会导致应用刷新，从而进行重复
 
 # tips
@@ -58,6 +59,7 @@ npm run lint
 - 单词表排序
 - 第一次初始化的时候，在路由里进行判断，是否设置了初始仓库，没有设置就跳转到设置页面，设置成功后进行数据请求并展示
 - 断点调试
+- 单词一键排序配置 右键菜单新增单词
 
 
 # 规范

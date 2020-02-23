@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'https://www.yuque.com/api/v2/'
-    // headers: {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
+    baseURL: 'https://www.yuque.com/api/v2/',
+    headers: {
+      'X-Auth-Token': 'NVKlMKxT6djkjGlCePzo6BmqqooNuqkRfWZUbxsr'
+    }
 });
 // 获取某篇文档的数据
 export function getArticle({userName, reposName, articleSlug}) {

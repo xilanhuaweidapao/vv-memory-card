@@ -65,16 +65,6 @@ export default {
     };
   },
   created() {
-    // 为标签定义类名
-    const classMap = {
-      ul: "word-list",
-      li: "word-item"
-    };
-    this.bindings = Object.keys(classMap).map(key => ({
-      type: "output",
-      regex: new RegExp(`<${key}>`, "g"),
-      replace: `<${key} class="${classMap[key]}">`
-    }));
   },
   mounted() {
     // .match(/(?<=\()[\w\W]+(?=\))/)
@@ -84,7 +74,6 @@ export default {
       reposName: "memory_space",
       articleSlug: "puwqy4"
     }).then(res => {
-      // console.log("res from display !!!", res, res.data.data.body);
       const imageSrc = res.data.data.body;
       // 匹配image 地址
       const imageSrcList = imageSrc.match(/(?<=\()[^\)]+(?=\))/gim);
@@ -138,7 +127,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus">
 // 为什么需要去除scoped???
 .hello {

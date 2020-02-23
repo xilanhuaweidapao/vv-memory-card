@@ -6,8 +6,8 @@
       v-if="content && content.length"
     >
       <swiper-slide v-for="(docList, index) in content" :key="index">
-        <el-card v-for="(doc, index) in docList" :key="index">
-            <p class="params">{{ doc }}</p>
+        <el-card class="docCard" v-for="(doc, index) in docList" :key="index">
+            <p class="docContent">{{ doc }}</p>
         </el-card>
       </swiper-slide>
     </swiper>
@@ -57,12 +57,11 @@ export default {
           }
         },
         autoplay: {
-          delay: 2000, // 切换时间开为参数
+          delay: 60000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
       },
-      bindings: {},
       content: "",
 
     };
@@ -85,12 +84,6 @@ export default {
     //   });
     //   this.content = finalContent;
     //   console.log('chunkData',chunkData,finalContent);
-    // });
-    // const loading = this.$loading({
-    //   lock: true,
-    //   text: "Loading",
-    //   spinner: "el-icon-loading",
-    //   background: "coral"
     // });
     // getArticle({userName: 'demaweiliya', reposName: 'memory_space', articleSlug: 'dc0o1d'}).then(res => {
     //   let data = res.data.data.body;
@@ -122,10 +115,15 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus">
-// 为什么需要去除scoped???
-.hello {
-  overflow: hidden;
+.docCard {
+  margin: 15px;
+  .el-card__body {
+    padding: 10px
+  }
+  .docContent {
+    font-size: 18px
+    margin: 0 10px 0 10px
+  }
 }
 </style>

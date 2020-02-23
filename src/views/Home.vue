@@ -7,6 +7,12 @@
       @click="openDrawer"
       circle
     ></el-button>
+    <el-button
+      class="drag-btn"
+      type="success"
+      icon="el-icon-setting"
+      circle
+    ></el-button>
     <Display />
     <el-drawer
       :append-to-body="true"
@@ -47,9 +53,17 @@ export default {
 <style lang="stylus">
   .home
     position relative
+    height 100%
   .setting-btn
     position absolute
     right 15px
     top 15px;
     z-index 1000
+  .drag-btn
+    position absolute
+    left 0px
+    top 5px
+    z-index 1000
+    -webkit-app-region: drag
+    cursor move
 </style>

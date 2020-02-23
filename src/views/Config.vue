@@ -104,7 +104,6 @@ export default {
                 depth: 1
               }
             ]);
-            console.log('Estore.store',Estore.store);
           }
         }
       );

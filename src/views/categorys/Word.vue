@@ -1,18 +1,16 @@
 <template>
-  <div class="hello">
+  <div class="container">
     <swiper
       :options="swiperOption"
       ref="mySwiper"
       v-if="content && content.length"
     >
       <swiper-slide v-for="(pageContent, index) in content" :key="index">
-        <div>
           <ul class="word-list">
             <li class="word-item" v-for="(word, index) in pageContent" :key="index">
               {{ word }}
             </li>
           </ul>
-        </div>
       </swiper-slide>
     </swiper>
   </div>
@@ -88,28 +86,36 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus">
 // 为什么需要去除scoped???
-.hello {
+.container {
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-container {
+  height: 100%
 }
 
 .word-list {
+  height 100%
   overflow: hidden;
   padding: 20px;
   padding-left: 30px;
   margin: 0;
   display: grid;
   grid-template-columns: repeat(3, 31%);
-  grid-template-rows: auto auto auto;
-  grid-row-gap: 20px;
-  grid-column-gap: 20px;
+  grid-template-rows: repeat(8, 9%);
+  grid-row-gap: 3%;
+  grid-column-gap: 3%;
 
   .word-item {
     display: inline-block;
-    padding: 8px;
+    padding-left: 12px;
     background-color: pink;
     border-radius: 8px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1rem;
+    line-height: 2.6
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
