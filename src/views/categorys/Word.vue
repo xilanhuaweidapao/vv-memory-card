@@ -100,7 +100,6 @@ export default {
   height 100%
   overflow: hidden;
   padding: 20px;
-  padding-left: 30px;
   margin: 0;
   display: grid;
   grid-template-columns: repeat(3, 31%);

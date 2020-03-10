@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="container">
     <swiper
       :options="swiperOption"
       ref="mySwiper"
@@ -129,8 +129,9 @@ export default {
 
 <style lang="stylus">
 // 为什么需要去除scoped???
-.hello {
+.container {
   overflow: hidden;
+  background #f5f5d5
 }
 
 .image-container {

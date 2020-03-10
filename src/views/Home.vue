@@ -10,7 +10,14 @@
     <el-button
       class="drag-btn"
       type="success"
-      icon="el-icon-setting"
+      icon="el-icon-rank"
+      circle
+    ></el-button>
+    <el-button
+      @click="openAllScreen"
+      class="all-screen-btn"
+      type="warning"
+      icon="el-icon-full-screen"
       circle
     ></el-button>
     <Display />
@@ -30,6 +37,7 @@
 <script>
 import Display from "@/views/Display.vue";
 import Config from "@/views/Config.vue";
+import { ipcRenderer } from "electron";
 
 export default {
   name: "home",
@@ -39,31 +47,41 @@ export default {
   },
   data() {
     return {
-      drawer: false
+      drawer: false,
+      isAllScreen: false
     };
   },
   methods: {
     openDrawer() {
       this.drawer = true;
+    },
+    openAllScreen() {
+      this.isAllScreen = !this.isAllScreen;
+      ipcRenderer.send('ALL_SCREEN', this.isAllScreen)
     }
   }
 };
 </script>
 
 <style lang="stylus">
-  .home
-    position relative
-    height 100%
-  .setting-btn
-    position absolute
-    right 15px
-    top 15px;
-    z-index 1000
-  .drag-btn
-    position absolute
-    left 0px
-    top 5px
-    z-index 1000
-    -webkit-app-region: drag
-    cursor move
+.home
+  position relative
+  height 100%
+.setting-btn
+  position absolute
+  right 5px
+  top 20px;
+  z-index 1000
+.drag-btn
+  position absolute
+  right 5px
+  top 60px;
+  z-index 1000
+  -webkit-app-region: drag
+  cursor move
+.all-screen-btn
+  position absolute
+  right 5px
+  top 100px;
+  z-index 1000
 </style>

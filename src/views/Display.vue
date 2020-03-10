@@ -122,7 +122,7 @@ export default {
     changeDisplayDoc() {
       if (Estore.has(this.currentReposName)) {
         // Math.floor(Math.random() * 3)
-        const { slug } = Estore.get(this.currentReposName)[1];
+        const { slug } = Estore.get(this.currentReposName)[4];
         getArticle({
           userName: this.currentUserName,
           reposName: this.currentReposName,

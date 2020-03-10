@@ -118,12 +118,16 @@ app.on("ready", async () => {
   watchIdle();
 });
 // 监听无操作状态进行全屏
-function watchIdle() {
+function watchIdle(isStop = false) {
   clearInterval(timer);
+  if (isStop) {
+    return;
+  }
   timer = setInterval(() => {
     // console.log(powerMonitor.getSystemIdleState(10));
     if (powerMonitor.getSystemIdleState(10) === "idle") {
       win.setFullScreen(true);
+      win.setAlwaysOnTop(true);
       clearInterval(timer);
       timer = setInterval(() => {
         if (powerMonitor.getSystemIdleState(10) === "active") {
@@ -132,8 +136,18 @@ function watchIdle() {
         }
       }, 1000);
     }
-  }, 4000);
+  }, 400000);
 }
+
+ipcMain.on("ALL_SCREEN", (e, param) => {
+  if (param) {
+    win.setFullScreen(true);
+    watchIdle(true);
+  } else {
+    win.setFullScreen(false);
+    watchIdle();
+  }
+});
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
