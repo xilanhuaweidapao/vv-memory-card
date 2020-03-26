@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <swiper
       :options="swiperOption"
       ref="mySwiper"
@@ -147,8 +147,6 @@ export default {
 </script>
 
 <style lang="stylus">
-.container {
-  background #f5f5d5
   .image-container {
   width 100%;
   height 100%;
@@ -188,6 +186,5 @@ export default {
     font-size: 18px
     margin: 0 10px 0 10px
   }
-}
 }
 </style>

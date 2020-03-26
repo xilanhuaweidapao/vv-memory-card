@@ -122,7 +122,7 @@ export default {
     changeDisplayDoc() {
       if (Estore.has(this.currentReposName)) {
         // Math.floor(Math.random() * 3)
-        const { slug } = Estore.get(this.currentReposName)[4];
+        const { slug } = Estore.get(this.currentReposName)[0];
         getArticle({
           userName: this.currentUserName,
           reposName: this.currentReposName,
@@ -147,6 +147,9 @@ export default {
         props: {
           data: this.resData
         },
+        attrs: {
+          class: 'container'
+        },
         on: {
           showEnd: this.endAndChange
         }
@@ -156,3 +159,13 @@ export default {
   }
 };
 </script>
+
+<style lang="stylus">
+.container {
+  background #f5f5d5
+  height 100%
+  .swiper-container {
+    height 100%
+  }
+}
+</style>

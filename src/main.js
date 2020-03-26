@@ -17,7 +17,7 @@ Vue.use(VueShowdown, {
 });
 
 Vue.config.productionTip = false;
-
+Vue.prototype.$log = window.console.log;
 new Vue({
   router,
   store,

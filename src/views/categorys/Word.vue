@@ -22,9 +22,7 @@ import { ipcRenderer } from "electron";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 const path = require("path");
-const filesPath = `${__static}/resources`;
 const fs = require("fs");
-import fileHelper from "@/utils/fileHelper";
 import chunk from "lodash.chunk";
 import { getArticle } from "@/api/yuque";
 import { shuffle } from "@/utils/utils";
@@ -75,7 +73,7 @@ export default {
       .replace(/<a name="\w{5}"><\/a>/gim, "");
     let result = filterData.match(/(?<=-\s)[^-]+/img); // 将md字符串匹配成内容数组
     const chunkData = chunk(shuffle(result), 24); // 随机分组
-    console.log('finalContent', chunkData);
+    // console.log('finalContent', chunkData);
     this.content = chunkData;
   },
   methods: {
