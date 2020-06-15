@@ -112,6 +112,11 @@ export default {
                 title: '正则',
                 slug: 'hkakvp',
                 depth: 1
+              },
+              {
+                title: '图形数学常识',
+                slug: 'gnuy8k',
+                depth: 1
               }
             ]);
           }

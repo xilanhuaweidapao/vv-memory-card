@@ -136,7 +136,8 @@ function watchIdle(isStop = false) {
         }
       }, 1000);
     }
-  }, 400000);
+  // 应该可以配置时间
+  }, 400 * 1000);
 }
 
 ipcMain.on("ALL_SCREEN", (e, param) => {

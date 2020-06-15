@@ -1,8 +1,6 @@
 <script>
 // Todo 在App.vue里面去请求数据
 import { ipcRenderer } from "electron";
-import "swiper/dist/css/swiper.css";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
 const path = require("path");
 const fs = require("fs");
 import fileHelper from "@/utils/fileHelper";
@@ -15,10 +13,6 @@ const Estore = new Store();
 
 export default {
   name: "Display",
-  components: {
-    swiper,
-    swiperSlide
-  },
   props: {
     msg: String
   },
@@ -40,17 +34,6 @@ export default {
   created() {
     // 从Estore获取第一个文档 并请求数据
     this.changeDisplayDoc();
-    // if (Estore.has(this.currentReposName)) {
-    //   const { slug } = Estore.get(this.currentReposName)[2];
-    //   getArticle({
-    //     userName: this.currentUserName,
-    //     reposName: this.currentReposName,
-    //     articleSlug: slug
-    //   }).then(res => {
-    //     this.resData = res.data.data.body;
-    //     this.contentType = res.data.data.custom_description;
-    //   });
-    // }
   },
   mounted() {
     this.loading = this.$loading({
@@ -121,8 +104,9 @@ export default {
     // 设置后应进行更新！！！
     changeDisplayDoc() {
       if (Estore.has(this.currentReposName)) {
-        // Math.floor(Math.random() * 3)
-        const { slug } = Estore.get(this.currentReposName)[0];
+        // this.generateRandomArticleIndex()
+        const { slug } = Estore.get(this.currentReposName)[5];
+        console.log('slug', slug);
         getArticle({
           userName: this.currentUserName,
           reposName: this.currentReposName,
@@ -136,6 +120,11 @@ export default {
           }
         });
       }
+    },
+    // 获取对象，生成随机文章 index
+    generateRandomArticleIndex() {
+      let len = Object.keys(Estore.get(this.currentReposName)).length;
+      return Math.floor(Math.random() * len);
     }
   },
   render(h) {

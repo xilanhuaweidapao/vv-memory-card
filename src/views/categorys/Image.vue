@@ -2,13 +2,11 @@
   <div>
     <swiper
       :options="swiperOption"
-      ref="swiperInstance"
-      @slide-change="slideChange"
+      ref="mySwiper"
       v-if="imageList && imageList.length"
     >
       <swiper-slide v-for="(imageSrc, index) in imageList" :key="index">
         <div class="image-container"><img :src="imageSrc" /></div>
-        <!-- <canvas id="imgCanvas" width="800" height="400"></canvas> -->
       </swiper-slide>
     </swiper>
   </div>
@@ -43,25 +41,28 @@ export default {
         speed: 1000,
         on: {
           slideChange: () => {
-            // console.log('isEnd',this.$refs.mySwiper.swiper.isEnd);
             // 在store里保存一个当前在展示的文档序号
-            const isEnd = this.$refs.swiperInstance.swiper.isEnd;
-            if (isEnd) {
+            const isEnd = this.$refs.mySwiper.swiper.isEnd;
+            let curIndex = this.$refs.mySwiper.swiper.activeIndex;
+            if (isEnd || (curIndex >= this.endPage)) {
               this.$emit("showEnd");
             }
           }
         },
         autoplay: {
-          delay: 10000, // 切换时间开为参数
+          delay: 1000, // 切换时间开为参数
           disableOnInteraction: false
           // virtual: true
         }
       },
       content: "",
-      imageList: []
+      imageList: [],
+      endPage: -1
     };
   },
-  created() {},
+  created() {
+    this.endPage = this.generateEndPage();
+  },
   mounted() {
     getArticle({
       userName: "demaweiliya",
@@ -75,9 +76,8 @@ export default {
     });
   },
   methods: {
-    slideChange() {
-      const swiperInstance = this.$refs.swiperInstance;
-      console.log('swiperInstance', swiperInstance);
+    generateEndPage() {
+      return 3 + Math.floor(Math.random() * 10);
     }
   }
 };

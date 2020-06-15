@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: 'https://www.yuque.com/api/v2/',
+    // 需要配置 token
     headers: {
       'X-Auth-Token': 'NVKlMKxT6djkjGlCePzo6BmqqooNuqkRfWZUbxsr'
     }

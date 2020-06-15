@@ -52,19 +52,24 @@ export default {
             // 在store里保存一个当前在展示的文档序号
             // 配置可以提到 mixin里
             const isEnd = this.$refs.mySwiper.swiper.isEnd;
-            if(isEnd) {
+            let curIndex = this.$refs.mySwiper.swiper.activeIndex;
+            if(isEnd || (curIndex >= this.endPage)) {
               this.$emit('showEnd');
             }
           }
         },
         autoplay: {
-          delay: 60000, // 切换时间开为参数
+          delay: 1000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
       },
-      content: ""
+      content: "",
+      endPage: -1
     };
+  },
+  created() {
+    this.endPage = this.generateEndPage();
   },
   mounted() {
     // 过滤标题与a标签
@@ -77,6 +82,9 @@ export default {
     this.content = chunkData;
   },
   methods: {
+    generateEndPage() {
+      return 3 + Math.floor(Math.random() * 10);
+    }
   }
 };
 </script>

@@ -6,15 +6,15 @@
 <script>
 export default {
   data() {
-    return {
-    }
-  }
+    return {};
+  },
 };
-let html = document.querySelector('html');
-html.style.fontSize = window.innerWidth / 40 + 'px';
+// 字体的自适应
+let html = document.querySelector("html");
+html.style.fontSize = window.innerWidth / 40 + "px";
 window.onresize = function() {
-  let html = document.querySelector('html');
-  html.style.fontSize = window.innerWidth / 40 + 'px';
+  let html = document.querySelector("html");
+  html.style.fontSize = window.innerWidth / 40 + "px";
 };
 </script>
 <style lang="stylus">

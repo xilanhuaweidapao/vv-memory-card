@@ -64,26 +64,31 @@ export default {
         speed: 1000,
         on: {
           slideChange: () => {
-            // console.log('isEnd',this.$refs.mySwiper.swiper.isEnd);
+            console.log('isEnd',this.$refs.mySwiper.swiper.activeIndex, this.endPage);
             // 在store里保存一个当前在展示的文档序号
             const isEnd = this.$refs.mySwiper.swiper.isEnd;
-            if (isEnd) {
+            let curIndex = this.$refs.mySwiper.swiper.activeIndex;
+            if (isEnd || (curIndex >= this.endPage)) {
+              console.log('end!!');
               this.$emit("showEnd");
             }
           }
         },
         autoplay: {
-          delay: 60000, // 切换时间开为参数
+          delay: 1000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
       },
       rawData: this.data,
       content: [],
-      result: null
+      result: null,
+      endPage: -1
     };
   },
-  created() {},
+  created() {
+    this.endPage = this.generateEndPage();
+  },
   mounted() {
     // .match(/(?<=\()[\w\W]+(?=\))/)
     // console.log('this.data', this.data);
@@ -97,10 +102,10 @@ export default {
     let filterData = this.rawData.match(
       /(?<=:::(info|danger|tips|warning|success)\n)[^:]+(?=:::)/gim
     );
-    console.log("filterData", filterData);
-    filterData.forEach((data, index) => {
-      this.content.push(this.formatData(data));
-    });
+    // console.log("filterData", filterData);
+    // filterData.forEach((data, index) => {
+    //   this.content.push(this.formatData(data));
+    // });
     this.imageSrcList.forEach(imgSrc => {
       this.content.push({
         img: imgSrc
@@ -108,7 +113,7 @@ export default {
     });
     this.result = chunk(this.content, 1);
     // this.content = chunkData;
-    console.log("chunkData", this.result);
+    // console.log("chunkData", this.result);
     // getArticle({userName: 'demaweiliya', reposName: 'memory_space', articleSlug: 'dc0o1d'}).then(res => {
     //   let data = res.data.data.body;
     //   let fileName = res.data.data.title;
@@ -141,6 +146,9 @@ export default {
         list: matchList(content),
         paragraph: matchParagraph(content)
       };
+    },
+    generateEndPage() {
+      return 3 + Math.floor(Math.random() * 10);
     }
   }
 };
@@ -151,8 +159,8 @@ export default {
   width 100%;
   height 100%;
   img {
-    height 100%
-    width 100%
+    height 90%
+    width 90%
     background-repeat no-repeat
     background-size cover
   }
