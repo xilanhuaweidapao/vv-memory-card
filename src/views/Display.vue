@@ -13,9 +13,6 @@ const Estore = new Store();
 
 export default {
   name: "Display",
-  props: {
-    msg: String
-  },
   data() {
     return {
       resData: null,
@@ -105,8 +102,8 @@ export default {
     changeDisplayDoc() {
       if (Estore.has(this.currentReposName)) {
         // this.generateRandomArticleIndex()
-        const { slug } = Estore.get(this.currentReposName)[5];
-        console.log('slug', slug);
+        const { slug } = Estore.get(this.currentReposName)[this.generateRandomArticleIndex()];
+        // console.log('slug', slug);
         getArticle({
           userName: this.currentUserName,
           reposName: this.currentReposName,
@@ -115,6 +112,7 @@ export default {
           this.docTitle = res.data.data.title;
           this.resData = res.data.data.body;
           this.contentType = res.data.data.custom_description;
+          // 在本地写入文章数据
           if(!fs.existsSync(`${__static}/resources/${this.docTitle}.md`)) {
             fileHelper.writeFile(`${__static}/resources/${this.docTitle}.md`, this.resData);
           }
@@ -134,6 +132,7 @@ export default {
       this.loading.close();
       return h(require(`./categorys/${docName}.vue`).default, {
         props: {
+          // 请求回来的数据
           data: this.resData
         },
         attrs: {

@@ -7,7 +7,7 @@
     >
       <swiper-slide v-for="(pageContent, index) in content" :key="index">
           <ul class="word-list">
-            <li class="word-item" v-for="(word, index) in pageContent" :key="index">
+            <li class="word-item" v-for="(word, index) in pageContent" :key="index" :title="word">
               {{ word }}
             </li>
           </ul>
@@ -19,29 +19,16 @@
 <script>
 // Todo 在App.vue里面去请求数据
 import { ipcRenderer } from "electron";
-import "swiper/dist/css/swiper.css";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
-const path = require("path");
-const fs = require("fs");
 import chunk from "lodash.chunk";
 import { getArticle } from "@/api/yuque";
 import { shuffle } from "@/utils/utils";
-import Estore from "electron-store";
 // 将md 转为html
 import MarkdownIt from "markdown-it";
+import common from '../../components/mixins/common';
 
 export default {
   name: "Display",
-  components: {
-    swiper,
-    swiperSlide
-  },
-  props: {
-    msg: String,
-    data: {
-      type: String
-    }
-  },
+  mixins: [common],
   data() {
     return {
       swiperOption: {
@@ -59,17 +46,13 @@ export default {
           }
         },
         autoplay: {
-          delay: 1000, // 切换时间开为参数
+          delay: 60000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
       },
-      content: "",
-      endPage: -1
+      content: [],
     };
-  },
-  created() {
-    this.endPage = this.generateEndPage();
   },
   mounted() {
     // 过滤标题与a标签
@@ -80,10 +63,8 @@ export default {
     const chunkData = chunk(shuffle(result), 24); // 随机分组
     // console.log('finalContent', chunkData);
     this.content = chunkData;
-  },
-  methods: {
-    generateEndPage() {
-      return 3 + Math.floor(Math.random() * 10);
+    if (this.endPage > this.content.length) {
+      this.endPage = this.content.length;
     }
   }
 };

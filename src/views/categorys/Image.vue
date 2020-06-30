@@ -15,24 +15,14 @@
 <script>
 // Todo 在App.vue里面去请求数据
 import { ipcRenderer } from "electron";
-import "swiper/dist/css/swiper.css";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
 const path = require("path");
 const filesPath = `${__static}/resources`;
-const fs = require("fs");
-import { getArticle } from "@/api/yuque";
-import { shuffle } from "@/utils/utils";
-import Estore from "electron-store";
+import common from '../../components/mixins/common';
+import { shuffle } from '../../utils/utils'
 
 export default {
   name: "Display",
-  components: {
-    swiper,
-    swiperSlide
-  },
-  props: {
-    msg: String
-  },
+  mixins:[common],
   data() {
     return {
       swiperOption: {
@@ -44,40 +34,28 @@ export default {
             // 在store里保存一个当前在展示的文档序号
             const isEnd = this.$refs.mySwiper.swiper.isEnd;
             let curIndex = this.$refs.mySwiper.swiper.activeIndex;
-            if (isEnd || (curIndex >= this.endPage)) {
+            if (isEnd || curIndex >= this.endPage) {
               this.$emit("showEnd");
             }
-          }
+          },
         },
         autoplay: {
-          delay: 1000, // 切换时间开为参数
+          delay: 60000, // 切换时间开为参数
           disableOnInteraction: false
-          // virtual: true
-        }
+        },
       },
       content: "",
-      imageList: [],
-      endPage: -1
+      imageList: []
     };
   },
-  created() {
-    this.endPage = this.generateEndPage();
-  },
   mounted() {
-    getArticle({
-      userName: "demaweiliya",
-      reposName: "memory_space",
-      articleSlug: "puwqy4"
-    }).then(res => {
-      const imageSrc = res.data.data.body;
-      // 匹配image 地址
-      const imageSrcList = imageSrc.match(/(?<=\()[^\)]+(?=\))/gim);
-      this.imageList = imageSrcList;
-    });
-  },
-  methods: {
-    generateEndPage() {
-      return 3 + Math.floor(Math.random() * 10);
+    const imageSrc = this.data;
+    // 匹配image 地址
+    const imageSrcList = imageSrc.match(/(?<=\()[^\)]+(?=\))/gim);
+    // 是否打乱也应该是一个配置
+    this.imageList = shuffle(imageSrcList);
+    if (this.endPage > this.imageList.length) {
+      this.endPage = this.imageList.length;
     }
   }
 };

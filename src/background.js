@@ -25,7 +25,6 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 function createWindow() {
-  // Create the browser window.
   // 获取屏幕宽高
   const { width } = electron.screen.getPrimaryDisplay().workAreaSize;
 
@@ -93,6 +92,7 @@ app.on("ready", async () => {
     //   console.error('Vue Devtools failed to install:', e.toString())
     // }
   }
+  // 自定义托盘
   tray = new Tray(path.join(__static, "icon.ico"));
   // 点击托盘图标控制应用显隐
   tray.on("click", function() {
@@ -125,6 +125,7 @@ function watchIdle(isStop = false) {
   }
   timer = setInterval(() => {
     // console.log(powerMonitor.getSystemIdleState(10));
+    // 10秒无操作就进行全屏
     if (powerMonitor.getSystemIdleState(10) === "idle") {
       win.setFullScreen(true);
       win.setAlwaysOnTop(true);

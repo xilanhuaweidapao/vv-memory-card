@@ -35,28 +35,16 @@
 <script>
 // Todo 在App.vue里面去请求数据
 import { ipcRenderer } from "electron";
-import "swiper/dist/css/swiper.css";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
-const path = require("path");
 const filesPath = `${__static}/resources`;
-const fs = require("fs");
 import fileHelper from "@/utils/fileHelper";
 import chunk from "lodash.chunk";
 import { getArticle } from "@/api/yuque";
 import { shuffle, matchList, matchTitle, matchParagraph } from "@/utils/utils";
-import Estore from "electron-store";
+import common from '../../components/mixins/common';
 // 不能使用相对路径？？？
 export default {
   name: "Display",
-  components: {
-    swiper,
-    swiperSlide
-  },
-  props: {
-    data: {
-      type: String
-    }
-  },
+  mixins:[common],
   data() {
     return {
       swiperOption: {
@@ -64,41 +52,37 @@ export default {
         speed: 1000,
         on: {
           slideChange: () => {
-            console.log('isEnd',this.$refs.mySwiper.swiper.activeIndex, this.endPage);
+            // console.log('isEnd',this.$refs.mySwiper.swiper.activeIndex, this.endPage);
             // 在store里保存一个当前在展示的文档序号
             const isEnd = this.$refs.mySwiper.swiper.isEnd;
             let curIndex = this.$refs.mySwiper.swiper.activeIndex;
             if (isEnd || (curIndex >= this.endPage)) {
-              console.log('end!!');
+              // console.log('end!!');
               this.$emit("showEnd");
             }
           }
         },
         autoplay: {
-          delay: 1000, // 切换时间开为参数
+          delay: 10000, // 切换时间开为参数
           disableOnInteraction: false,
           virtual: true
         }
       },
       rawData: this.data,
       content: [],
-      result: null,
-      endPage: -1
+      result: null
     };
-  },
-  created() {
-    this.endPage = this.generateEndPage();
   },
   mounted() {
     // .match(/(?<=\()[\w\W]+(?=\))/)
     // console.log('this.data', this.data);
     // 替换掉a标签
-    console.log("this.rawData", this.rawData);
+    // console.log("this.rawData", this.rawData);
     this.rawData = this.rawData.replace(/<a name="(\w+)"><\/a>/gim, "");
     this.imageSrcList = this.rawData.match(
       /(?<=\()(http|https)[^\)]+(?=\))/gim
     );
-    console.log("this.imageSrcList", this.imageSrcList);
+    // console.log("this.imageSrcList", this.imageSrcList);
     let filterData = this.rawData.match(
       /(?<=:::(info|danger|tips|warning|success)\n)[^:]+(?=:::)/gim
     );
@@ -146,9 +130,6 @@ export default {
         list: matchList(content),
         paragraph: matchParagraph(content)
       };
-    },
-    generateEndPage() {
-      return 3 + Math.floor(Math.random() * 10);
     }
   }
 };

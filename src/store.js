@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     reposName: 'memory_space',
-    userName: 'demaweiliya'
+    userName: 'demaweiliya',
+    switchTime: 30,
   },
   mutations: {
     changeRepos(state, reposName) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     changeUserName(state, userName) {
       state.userName = userName;
+    },
+    changeSwitchTime(state, time) {
+      state.switchTime = time
     }
   },
   actions: {
@@ -27,7 +31,8 @@ export default new Vuex.Store({
   },
   getters: {
     reposName: state => state.reposName,
-    userName: state => state.userName
+    userName: state => state.userName,
+    switchTime: state => state.switchTime
   },
   plugins:[createLogger()]
 })

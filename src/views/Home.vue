@@ -55,6 +55,7 @@ export default {
     openDrawer() {
       this.drawer = true;
     },
+    // 全屏
     openAllScreen() {
       this.isAllScreen = !this.isAllScreen;
       ipcRenderer.send('ALL_SCREEN', this.isAllScreen)
