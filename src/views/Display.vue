@@ -145,12 +145,22 @@ export default {
       }
       return this.articleIndex;
     },
+    compatibleDocType(docName) {
+      if (docName === 'None') {
+        this.changeDisplayDoc()
+      }
+      return false;
+    }
   },
   render(h) {
     if (this.contentType && this.resData) {
-      const docName =
+      let docName =
         this.contentType.charAt(0).toUpperCase() + this.contentType.slice(1);
       console.log("docName", docName);
+      docName = this.compatibleDocType(docName);
+      if (!docName) {
+        return;
+      }
       this.loading.close();
       // 对错误的处理？
       // 没有触发组件的重新渲染？
