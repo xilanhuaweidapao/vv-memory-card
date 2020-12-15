@@ -13,6 +13,10 @@
 
 - 如何新建分支 提交到新分支
 
+* Bugs
+
+有时启动应用一直处于loading
+
 > git checkout -b branchName
 > git push
 

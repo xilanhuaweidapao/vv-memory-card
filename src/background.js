@@ -13,6 +13,7 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater"
 const isDevelopment = process.env.NODE_ENV !== "production";
 const path = require("path");
 // Keep a global reference of the window object, if you don't, the window will
@@ -50,6 +51,7 @@ function createWindow() {
     createProtocol("app");
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
+    autoUpdater.checkForUpdatesAndNotify() // 自动更新
   }
 
   win.on("closed", () => {
@@ -141,6 +143,7 @@ function watchIdle(isStop = false) {
   }, 400 * 1000);
 }
 
+// 监听全屏
 ipcMain.on("ALL_SCREEN", (e, param) => {
   if (param) {
     win.setFullScreen(true);

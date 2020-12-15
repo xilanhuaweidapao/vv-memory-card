@@ -17,7 +17,9 @@ export default {
     return {
       resData: null,
       contentType: null,
-      docTitle: null
+      docTitle: null,
+      compIndex: 0,
+      articleIndex: 0
     };
   },
   computed: {
@@ -26,6 +28,9 @@ export default {
     },
     currentUserName() {
       return this.$store.getters.userName;
+    },
+    playMode() {
+      return this.$store.getters.playMode;
     }
   },
   created() {
@@ -37,8 +42,9 @@ export default {
       lock: true,
       text: "Loading",
       spinner: "el-icon-loading",
-      background: "coral"
+      background: "coral",
     });
+    console.log("estore", Estore.store);
     // .match(/(?<=\()[\w\W]+(?=\))/)
     // console.log("estore", Estore.store);
     // getArticle({
@@ -101,50 +107,70 @@ export default {
     // 设置后应进行更新！！！
     changeDisplayDoc() {
       if (Estore.has(this.currentReposName)) {
+        const { slug } = Estore.get(this.currentReposName)[
+          this.generateRandomArticleIndex(this.playMode)
+        ];
         // this.generateRandomArticleIndex()
-        const { slug } = Estore.get(this.currentReposName)[this.generateRandomArticleIndex()];
-        // console.log('slug', slug);
+        console.log("slug", slug);
         getArticle({
           userName: this.currentUserName,
           reposName: this.currentReposName,
-          articleSlug: slug
-        }).then(res => {
+          articleSlug: slug,
+        }).then((res) => {
           this.docTitle = res.data.data.title;
           this.resData = res.data.data.body;
           this.contentType = res.data.data.custom_description;
           // 在本地写入文章数据
-          if(!fs.existsSync(`${__static}/resources/${this.docTitle}.md`)) {
-            fileHelper.writeFile(`${__static}/resources/${this.docTitle}.md`, this.resData);
-          }
-        });
+          // if (!fs.existsSync(`${__static}/resources/${this.docTitle}.md`)) {
+          //   fileHelper.writeFile(
+          //     `${__static}/resources/${this.docTitle}.md`,
+          //     this.resData
+          //   );
+          // }
+        }).catch((e) => {
+          // 网络未连接时的处理！
+          // 无法测试
+          this.changeDisplayDoc();
+        })
       }
     },
     // 获取对象，生成随机文章 index
-    generateRandomArticleIndex() {
+    generateRandomArticleIndex(mode) {
       let len = Object.keys(Estore.get(this.currentReposName)).length;
-      return Math.floor(Math.random() * len);
-    }
+      if (mode === 'mix') {
+        return Math.floor(Math.random() * len);
+      }
+      if (this.articleIndex++ >= len) {
+        this.articleIndex = 0;
+      }
+      return this.articleIndex;
+    },
   },
   render(h) {
     if (this.contentType && this.resData) {
       const docName =
         this.contentType.charAt(0).toUpperCase() + this.contentType.slice(1);
+      console.log("docName", docName);
       this.loading.close();
-      return h(require(`./categorys/${docName}.vue`).default, {
+      // 对错误的处理？
+      // 没有触发组件的重新渲染？
+      let content = h(require(`./categorys/${docName}.vue`).default, {
         props: {
           // 请求回来的数据
-          data: this.resData
+          data: this.resData,
         },
         attrs: {
-          class: 'container'
+          class: "container",
+          index: this.docTitle
         },
         on: {
-          showEnd: this.endAndChange
-        }
+          showEnd: this.endAndChange,
+        },
       });
+      return content;
     }
     return;
-  }
+  },
 };
 </script>
 

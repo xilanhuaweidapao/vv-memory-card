@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      endPage: -1,
+      endPage: -1
     };
   },
   computed: {
@@ -22,24 +22,27 @@ export default {
       return this.$store.getters.switchTime;
     },
   },
-  watch: {
-    switchTime(val) {
-        let newObj = {
-            delay: val * 1000,
-            disableOnInteraction: false
-        }
-        this.$set(this.swiperOption, 'autoplay', newObj);
-        // delay: 60000, // 切换时间开为参数
-        // disableOnInteraction: false
-        // this.swiperOption.autoplay.delay = val;
+  watch:{
+    data() {
+      this.updateData();
     }
   },
-  created() {
-    this.endPage = this.generateEndPage();
-  },
   methods: {
-    generateEndPage() {
-      return 10 + Math.floor(Math.random() * 10);
+    generateEndPage(limit) {
+      let res = 6 + Math.floor(Math.random() * 6);
+      if ( limit <= 6) {
+        return limit - 1;
+      }
+      if (limit && res >= limit) {
+        return this.generateEndPage(limit);
+      }
+      return res;
     },
+    handlePageSwitch(index) {
+      console.log('page switch', index, this.endPage);
+      if (index >= this.endPage) {
+        this.$emit('showEnd');
+      }
+    }
   },
 };

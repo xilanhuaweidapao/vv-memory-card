@@ -8,8 +8,10 @@ export default new Vuex.Store({
   state: {
     reposName: 'memory_space',
     userName: 'demaweiliya',
-    switchTime: 30,
+    switchTime: 40000,
+    playMode: 'mix' // options: mix order
   },
+  // 是否应该有一个配置文件，初始化读取进行store 初始化？
   mutations: {
     changeRepos(state, reposName) {
       state.reposName = reposName;
@@ -19,6 +21,9 @@ export default new Vuex.Store({
     },
     changeSwitchTime(state, time) {
       state.switchTime = time
+    },
+    changePlayMode(state, mode) {
+      state.playMode = mode;
     }
   },
   actions: {
@@ -32,7 +37,8 @@ export default new Vuex.Store({
   getters: {
     reposName: state => state.reposName,
     userName: state => state.userName,
-    switchTime: state => state.switchTime
+    switchTime: state => state.switchTime,
+    playMode: state => state.playMode
   },
   plugins:[createLogger()]
 })

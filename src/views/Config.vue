@@ -36,6 +36,20 @@
           <el-button type="primary" @click="onSubmit">保存配置</el-button>
         </el-form-item>
       </el-form>
+      <div>
+        播放模式：
+        <el-select
+            :value="playMode"
+            @change="changePlayMode"
+          >
+            <el-option
+              v-for="(option, index) in playModeOptions"
+              :key="index"
+              :label="option.label"
+              :value="option.value"
+            ></el-option>
+        </el-select>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -57,11 +71,16 @@ export default {
         userName: "",
       },
       timeOptions: [
-        { label: '5', value: 5 },
-        { label: '30', value: 30 },
-        { label: '40', value: 40 },
-        { label: '50', value: 50 },
-        { label: '60', value: 60 }
+        { label: '5', value: 5000 },
+        { label: '30', value: 30000 },
+        { label: '40', value: 40000 },
+        { label: '50', value: 50000 },
+        { label: '60', value: 60000 },
+        { label: '120', value: 120000 }
+      ],
+      playModeOptions: [
+        { label: '顺序播放', value: 'order' },
+        { label: '乱序播放', value: 'mix' },
       ]
     };
   },
@@ -75,6 +94,9 @@ export default {
     },
     switchTime() {
       return this.$store.getters.switchTime;
+    },
+    playMode() {
+      return this.$store.getters.playMode;
     }
   },
   methods: {
@@ -104,7 +126,7 @@ export default {
       this.$store.dispatch("changeRepos", this.config.reposName);
 
       this.$store.dispatch("changeUserName", this.config.userName);
-      // console.log('estore', Estore.store);
+      console.log('estore', Estore.store);
       getDetailFromRepos(this.config.userName, this.config.reposName).then(
         (res) => {
           const data = res.data.data;
@@ -127,36 +149,13 @@ export default {
     },
     changeSwitchTime(value) {
       this.$store.commit('changeSwitchTime', value);
+    },
+    changePlayMode(value) {
+      this.$store.commit('changePlayMode', value);
     }
   },
 };
-// [
-//               {
-//                 title: "记忆截图",
-//                 slug: "puwqy4",
-//                 depth: 1
-//               },
-//               {
-//                 title: "陌生单词",
-//                 slug: "dc0o1d",
-//                 depth: 1
-//               },
-//               {
-//                 title: "WebGL",
-//                 slug: 'tbi6f6',
-//                 depth: 1
-//               },
-//               {
-//                 title: '正则',
-//                 slug: 'hkakvp',
-//                 depth: 1
-//               },
-//               {
-//                 title: '图形数学常识',
-//                 slug: 'gnuy8k',
-//                 depth: 1
-//               }
-//             ]
+
 </script>
 
 <style lang="stylus">

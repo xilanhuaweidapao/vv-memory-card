@@ -1,13 +1,9 @@
 <template>
   <div>
-    <swiper
-      :options="swiperOption"
-      ref="mySwiper"
-      v-if="content && content.length"
-    >
-      <swiper-slide v-for="(docList, index) in result" :key="index">
+    <el-carousel>
+      <el-carousel-item v-for="(docList, index) in result" :key="index">
         <el-card class="docCard" v-for="(doc, index) in docList" :key="index">
-          <h4 class="title" v-if="doc.title">{{ doc.title[0] }}</h4>
+          <!-- <h4 class="title" v-if="doc.title">{{ doc.title[0] }}</h4>
           <ul class="list" v-if="doc.list">
             <li v-for="(item, index) in doc.list" :key="index">{{ item }}</li>
           </ul>
@@ -22,13 +18,13 @@
             >
               {{ item }}
             </p>
-          </div>
+          </div> -->
           <div class="image-container" v-if="doc.img">
             <img :src="doc.img" />
           </div>
         </el-card>
-      </swiper-slide>
-    </swiper>
+      </el-carousel-item>
+    </el-carousel>
   </div>
 </template>
 
@@ -47,27 +43,6 @@ export default {
   mixins:[common],
   data() {
     return {
-      swiperOption: {
-        loop: true,
-        speed: 1000,
-        on: {
-          slideChange: () => {
-            // console.log('isEnd',this.$refs.mySwiper.swiper.activeIndex, this.endPage);
-            // 在store里保存一个当前在展示的文档序号
-            const isEnd = this.$refs.mySwiper.swiper.isEnd;
-            let curIndex = this.$refs.mySwiper.swiper.activeIndex;
-            if (isEnd || (curIndex >= this.endPage)) {
-              // console.log('end!!');
-              this.$emit("showEnd");
-            }
-          }
-        },
-        autoplay: {
-          delay: 10000, // 切换时间开为参数
-          disableOnInteraction: false,
-          virtual: true
-        }
-      },
       rawData: this.data,
       content: [],
       result: null
@@ -111,16 +86,6 @@ export default {
     //   // let result = matchs.map(word => {
     //   //   return word.replace(/<\/li>/g, "").replace(/<li>/g, "- ");
     //   // });
-
-    //   const chunkData = chunk(shuffle(result), 21);
-    //   const finalContent = chunkData.map(pageData => {
-    //     return pageData.join("\n");
-    //   });
-    //   // console.log('finalContent', finalContent);
-    //   this.content = finalContent;
-    //   loading.close();
-    //   //根据修改时间
-    // });
   },
   methods: {
     formatData(content) {
