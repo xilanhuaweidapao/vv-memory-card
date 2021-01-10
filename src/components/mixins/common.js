@@ -28,7 +28,12 @@ export default {
     }
   },
   methods: {
-    generateEndPage(limit) {
+    generateEndPage(limit, maxLen) {
+
+      if (maxLen && maxLen < 6) {
+        this.handlePageSwitch(limit)
+      }
+
       let res = 6 + Math.floor(Math.random() * 6);
       if ( limit <= 6) {
         return limit - 1;

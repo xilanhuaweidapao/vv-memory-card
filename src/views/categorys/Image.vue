@@ -54,11 +54,11 @@ export default {
     updateData() {
       const imageSrc = this.data;
       // 匹配image 地址
-      console.log("mounted comp");
       const imageSrcList = imageSrc.match(/(?<=\()[^\)]+(?=\))/gim);
       // 是否打乱也应该是一个配置
       this.imageList = shuffle(imageSrcList);
-      this.endPage = this.generateEndPage(this.imageList.length);
+      this.endPage = this.generateEndPage(this.imageList.length, this.imageList.length);
+      console.log('this.endPage', this.endPage);
     },
   },
 };

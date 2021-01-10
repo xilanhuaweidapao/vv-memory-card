@@ -147,9 +147,10 @@ export default {
     },
     compatibleDocType(docName) {
       if (docName === 'None') {
-        this.changeDisplayDoc()
+        this.changeDisplayDoc();
+        return false;
       }
-      return false;
+      return docName;
     }
   },
   render(h) {
@@ -178,6 +179,8 @@ export default {
         },
       });
       return content;
+    } else {
+      this.changeDisplayDoc();
     }
     return;
   },

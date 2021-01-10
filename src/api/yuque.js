@@ -1,10 +1,10 @@
 import axios from 'axios';
-
+import { YQ_TOKEN } from '../../tokenConfig';
 const instance = axios.create({
     baseURL: 'https://www.yuque.com/api/v2/',
     // 需要配置 token
     headers: {
-      'X-Auth-Token': 'NVKlMKxT6djkjGlCePzo6BmqqooNuqkRfWZUbxsr'
+      'X-Auth-Token': YQ_TOKEN
     }
 });
 // 获取某篇文档的数据
